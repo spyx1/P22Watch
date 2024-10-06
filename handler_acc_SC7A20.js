@@ -1,7 +1,7 @@
 acc={
 	interrupt:0,
 
-	on: function(){
+	on: function() {
 		i2c.writeTo(0x18,0x20,0x4f); //CTRL_REG1 20h ODR3 ODR2 ODR1 ODR0 LPen Zen Yen Xen , 50hz, lpen1. zyx
 		i2c.writeTo(0x18,0x21,0x00); //highpass filter disabled
 		i2c.writeTo(0x18,0x22,0x40); //ia1 interrupt to INT1
@@ -15,8 +15,8 @@ acc={
 		this.init();
 	},
 
-	off: function(){
-		if (this.interrupt){
+	off: function() {
+		if (this.interrupt) {
 			clearWatch(this.interrupt);
 			this.interrupt = 0;
 		}
@@ -27,13 +27,17 @@ acc={
 		return true;
 	},
 
-	init:function(){
+	init:function() {
 		i2c.writeTo(0x18,0x32,20); //int1_ths-threshold = 250 milli g's
 		i2c.writeTo(0x18,0x33,1); //duration = 1 * 20ms
 
-		this.interrupt = setWatch(()=>{
+		this.interrupt = setWatch(()=> {
 			console.log('acc wake');
-		}, D8, {repeat:true, edge:"rising", debounce:50});
+		}, D8, {
+			repeat: true, 
+			edge: "rising", 
+			debounce: 50
+		});
 
 		return true;
 	},
